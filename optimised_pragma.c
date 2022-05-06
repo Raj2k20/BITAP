@@ -1,6 +1,6 @@
 #include"bitap.h"
 
-void SearchString_opt(int* a, const char *text, const char *pattern)
+void SearchString_opt_pragma(int* a, const char *text, const char *pattern)
 {
 	int m = strlen(pattern);
 	unsigned long R;
@@ -12,13 +12,17 @@ void SearchString_opt(int* a, const char *text, const char *pattern)
 	k=0;
 	int check = 0;
 	
-	printf("\n-------------------- Optimised approach -------------------\n");
+	printf("\n-------------------- Optimised pragma approach -------------------\n");
 	R = ~1;
+    #pragma parallel omp for
 	for (i = 0; i <= CHAR_MAX; ++i)
 		patternMask[i] = ~0;
+
+    #pragma parallel omp for
 	for (i = 0; i < m; ++i)
 		patternMask[pattern[i]] &= ~(1UL << i);
 	
+    #pragma parallel omp for
 	for (i = 0; i < strlen(text); i++)
 	{
 		if(pattern[0] == text[i])
@@ -28,6 +32,7 @@ void SearchString_opt(int* a, const char *text, const char *pattern)
 		}
 	}
 
+    #pragma parallel omp for
 	for (i = 0; i<start_index; ++i)
 	{
 		R = ~1;

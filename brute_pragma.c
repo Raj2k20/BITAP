@@ -1,6 +1,6 @@
 #include"bitap.h"
 
-void SearchString(int* a, const char *text, const char *pattern)
+void SearchString_pragma(int* a, const char *text, const char *pattern)
 {
 	int m = strlen(pattern);
 	unsigned long R;
@@ -11,10 +11,12 @@ void SearchString(int* a, const char *text, const char *pattern)
 	int check = 0;
 	
 	R = ~1;
-	printf("--------------- Brute Force approach ---------------------\n");
+	printf("------------------- Pragma approach --------------------\n");
+	#pragma parallel omp for
 	for (i = 0; i <= CHAR_MAX; ++i)
 		patternMask[i] = ~0;
 
+	#pragma parallel omp for
 	for (i = 0; i < m; ++i)
 		patternMask[pattern[i]] &= ~(1UL << i);
 
